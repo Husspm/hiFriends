@@ -1,0 +1,25 @@
+{
+  "name": "hifriends",
+  "version": "1.0.0",
+  "description": "friend finder using node and express",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Husspm/hiFriends.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Husspm/hiFriends/issues"
+  },
+  "homepage": "https://github.com/Husspm/hiFriends#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "path": "^0.12.7"
+  }
+}
