@@ -16,28 +16,20 @@
 <body>
 
     <div class="container">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-  Launch demo modal
-</button>
-
         <!-- Modal -->
-        <div class="modal" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal" id="resultsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                        <h2>Your results are in</h2>
+                        </button>
                     </div>
                     <div class="modal-body">
-                        <h4 id="base"></h4>
-                        <h4 id="match"></h4>
+                        <h2 id="base"></h2>
+                        <h2 id="match"></h2>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -103,14 +95,17 @@
             }
         }
         var person = new Friend(name, photo, answers);
+        $("#name").val("");
+        $("#photo").val("");
+        for (var Qnum = 1; Qnum < 11; Qnum++) {
+            $("#Q" + Qnum).val("");
+        }
         makePost(person);
     }
 
     function makePost(person) {
         $.post("/api/friends", person)
             .done(function(data) {
-                console.log(data);
-                alert("GOT it!");
                 gatherAll(person.name);
             });
     }
@@ -138,26 +133,26 @@
                         var saveIndex = newIndex;
                     }
                 }
+                $("#base").text(friendsData[saveIndex].name);
                 if (saveIndex === 0) {
-                    console.log(friendsData[saveIndex].name, "your match is", friendsData[saveIndex + 1].name);
+                    $("#match").text("Your closest match is " + friendsData[saveIndex + 1].name);
                 } else if (saveIndex === friendsData.length - 1) {
-                    console.log(friendsData[saveIndex].name, "your match is", friendsData[saveIndex - 1].name);
+                    $("#match").text("Your closest match is " + friendsData[saveIndex - 1].name);
                 } else {
                     comparison(friendsData[saveIndex].total, friendsData[saveIndex - 1].total, friendsData[saveIndex + 1].total);
 
                     function comparison(base, compareOne, compareTwo) {
                         var caseOne = Math.abs(base - compareOne);
                         var caseTwo = Math.abs(base - compareTwo);
-                        console.log(caseOne, "first comparison");
-                        console.log(caseTwo, "second comparison");
                         if (caseOne < caseTwo) {
-                            console.log(friendsData[saveIndex].name, "your match is", friendsData[saveIndex - 1].name);
+                            $("#match").text("Your closest match is " + friendsData[saveIndex - 1].name);
                         } else {
-                            console.log(friendsData[saveIndex].name, "your match is", friendsData[saveIndex + 1].name);
+                            $("#match").text("Your closest match is " + friendsData[saveIndex + 1].name);
                         }
                     }
                 }
             });
+        $("#resultsModal").modal('toggle');
     }
 </script>
 
