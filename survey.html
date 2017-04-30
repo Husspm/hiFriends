@@ -27,6 +27,7 @@
                     <div class="modal-body">
                         <h2 id="base"></h2>
                         <h2 id="match"></h2>
+                        <img id="matchphoto" src="">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -44,36 +45,40 @@
                 <input type="text" id="name" placeholder="Enter your name" required>
                 <label for="photo">Photo URL</label>
                 <input type="text" id="photo" placeholder="Enter your photo URL" required>
-                <p>Question One: You prefer to cook for yourself</p>
+                <p><strong>Question One:</strong> You prefer to cook for yourself</p>
                 <input id="Q1" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Two: You enjoy going to events with large crowds</p>
+                <p><strong>Question Two:</strong> You enjoy going to events with large crowds</p>
                 <input id="Q2" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Three: You enjoy outdoor activites such as hiking and swimming</p>
+                <p><strong>Question Three:</strong> You enjoy outdoor activites such as hiking and swimming</p>
                 <input id="Q3" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Four: You think honesty is important even if it will hurt someones feelings</p>
+                <p><strong>Question Four:</strong> You think honesty is important even if it will hurt someones feelings</p>
                 <input id="Q4" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Five: You enjoy art and music</p>
+                <p><strong>Question Five:</strong> You enjoy art and music</p>
                 <input id="Q5" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Six: You like to laugh and have a good sense of humor</p>
+                <p><strong>Question Six:</strong> You like to laugh and have a good sense of humor</p>
                 <input id="Q6" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Seven: You try to always listen to your conscience</p>
+                <p><strong>Question Seven:</strong> You try to always listen to your conscience</p>
                 <input id="Q7" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Eight: You feel compassion when you see someone is upset</p>
+                <p><strong>Question Eight:</strong> You feel compassion when you see someone is upset</p>
                 <input id="Q8" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Nine: You have sentimental feelings about the place where you grew up</p>
+                <p><strong>Question Nine:</strong> You have sentimental feelings about the place where you grew up</p>
                 <input id="Q9" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
-                <p>Question Ten: You are generally happy and try to not let things get you down</p>
+                <p><strong>Question Ten:</strong> You are generally happy and try to not let things get you down</p>
                 <input id="Q10" type="number" min=1 max=5 required placeholder="1 strongly disagree - 5 strongly agree">
                 <button id="surveySubmit" type="submit">Submit your answers</button>
         </div>
-
+        <footer class="foot">
+            <span class="foot-text"><a href="/api/friends">API</a></span>
+            <span class="foot-text"><a href="https://github.com/Husspm/hiFriends">GitHub</a></span>
+        </footer>
+    </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 <script>
     $("#surveySubmit").on("click", gatherValues);
-
+    //contructor for new person to be added into api
     function Friend(name, photo, values) {
         this.name = name;
         this.photo = photo;
@@ -136,8 +141,10 @@
                 $("#base").text(friendsData[saveIndex].name);
                 if (saveIndex === 0) {
                     $("#match").text("Your closest match is " + friendsData[saveIndex + 1].name);
+                    $("#matchphoto").attr("src", friendsData[saveIndex + 1].photo);
                 } else if (saveIndex === friendsData.length - 1) {
                     $("#match").text("Your closest match is " + friendsData[saveIndex - 1].name);
+                    $("#matchphoto").attr("src", friendsData[saveIndex - 1].photo);
                 } else {
                     comparison(friendsData[saveIndex].total, friendsData[saveIndex - 1].total, friendsData[saveIndex + 1].total);
 
@@ -146,8 +153,10 @@
                         var caseTwo = Math.abs(base - compareTwo);
                         if (caseOne < caseTwo) {
                             $("#match").text("Your closest match is " + friendsData[saveIndex - 1].name);
+                            $("#matchphoto").attr("src", friendsData[saveIndex - 1].photo);
                         } else {
                             $("#match").text("Your closest match is " + friendsData[saveIndex + 1].name);
+                            $("#matchphoto").attr("src", friendsData[saveIndex + 1].photo);
                         }
                     }
                 }
