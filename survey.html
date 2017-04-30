@@ -16,7 +16,7 @@
 <body>
 
     <div class="container">
-        <!-- Modal -->
+        <!-- Modal ! ripped straight out of bootstrap doc and modified-->
         <div class="modal" id="resultsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -85,7 +85,7 @@
         this.score = values;
         return this;
     }
-
+    //function to gather all info, returns if any fields are missing
     function gatherValues() {
         event.preventDefault();
         var answers = [];
@@ -95,10 +95,11 @@
             var answer = $("#Q" + Qnum).val();
             answers.push(answer);
             if (name === "" || photo === "" || answers[Qnum] === "") {
-                alert("You must have missed some information");
+                alert("You must have missed some key information");
                 return;
             }
         }
+        //create new Friend object and clear the input fields
         var person = new Friend(name, photo, answers);
         $("#name").val("");
         $("#photo").val("");
@@ -107,14 +108,16 @@
         }
         makePost(person);
     }
-
+    //post new person to the api
     function makePost(person) {
         $.post("/api/friends", person)
             .done(function(data) {
                 gatherAll(person.name);
             });
     }
-
+    //this is pretty convoluted and I'm sure there is a simplier way to do this.
+    //But since I was building it up one step at a time I just ran with it
+    //eg...I probably should have made a total in the contructor rather than after the fact for comparison purposes
     function gatherAll(name) {
         var currentURL = window.location.origin;
         $.ajax({
@@ -128,26 +131,32 @@
                         var score = parseInt(friendsData[index].score[sIndex]);
                         total += score;
                     }
+                    //updates the object with a total score
                     friendsData[index].total = total;
                 }
+                //resorts the array via total score
                 friendsData.sort(function(a, b) {
                     return a.total - b.total;
                 });
+                //finds index of most recent addition in the newly sorted array
                 for (var newIndex = 0; newIndex < friendsData.length; newIndex++) {
                     if (name === friendsData[newIndex].name) {
                         var saveIndex = newIndex;
                     }
                 }
                 $("#base").text(friendsData[saveIndex].name);
+                //if they are at index 0 no comparisons need to be made
                 if (saveIndex === 0) {
                     $("#match").text("Your closest match is " + friendsData[saveIndex + 1].name);
                     $("#matchphoto").attr("src", friendsData[saveIndex + 1].photo);
+                    //same thing for if index is at the end of the array    
                 } else if (saveIndex === friendsData.length - 1) {
                     $("#match").text("Your closest match is " + friendsData[saveIndex - 1].name);
                     $("#matchphoto").attr("src", friendsData[saveIndex - 1].photo);
                 } else {
+                    // if index has 2 'neighbors' find the one with the closest score
                     comparison(friendsData[saveIndex].total, friendsData[saveIndex - 1].total, friendsData[saveIndex + 1].total);
-
+                    //compare the difference between the two closest scores, lowest difference is the closest match
                     function comparison(base, compareOne, compareTwo) {
                         var caseOne = Math.abs(base - compareOne);
                         var caseTwo = Math.abs(base - compareTwo);
@@ -161,6 +170,7 @@
                     }
                 }
             });
+        //after all that is complete show the modal window
         $("#resultsModal").modal('toggle');
     }
 </script>
