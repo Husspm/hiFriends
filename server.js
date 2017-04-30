@@ -17,6 +17,9 @@ exports = friends;
 app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
 });
+app.use(routes.targets.one[0], function(req, res) {
+    res.sendFile(path.join(__dirname, routes.targets.one[1]));
+});
 app.get(routes.targets.one[0], function(req, res) {
     res.sendFile(path.join(__dirname, routes.targets.one[1]));
 });
