@@ -93,6 +93,11 @@
         var photo = $("#photo").val().trim();
         for (var Qnum = 1; Qnum < 11; Qnum++) {
             var answer = $("#Q" + Qnum).val();
+            //added in after mobile testing, input type = number doesn't work the same on a phone
+            //it allowed me to add any number, see API result From Mobile    
+            if (answer > 5) {
+                answer = 5;
+            }
             answers.push(answer);
             if (name === "" || photo === "" || answers[Qnum] === "") {
                 alert("You must have missed some key information");
